@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %} Manage Shartnoma | KIF {% endblock title %}
+
+{% block side_bar %}
+    {% include 'partial_active_element.html' with active='manage_shartnoma' %}
+{% endblock side_bar %}
+
+{% block content %}
+	<div class="container-fluid mt-5">
+
+              {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+            <!-- Heading -->
+            <div class="card mb-4 wow fadeIn">
+
+                <!--Card content-->
+                <div class="card-body d-sm-flex justify-content-between">
+
+                    <h6 class="mb-2 mb-sm-0 pt-1">
+                        <a href="/">Home Page</a>
+                        <span>/</span>
+                        <span>Shartnoma</span>
+                    </h6>
+                </div>
+
+            </div>
+            <!-- Heading -->
+            <!-- Heading -->
+            <div class="card">
+            <div class="card-body">
+            <h6 class="mb-2 mb-sm-0 pt-1">
+              {% if request.user.is_superuser %}
+              <a href="{% url 'create_new_shartnoma' %}" class="btn btn-default btn-rounded mb-4">
+               Add Shartnoma
+              </a>
+              {% else %}
+              <a href="{% url 'create_new_payment' %}" class="btn btn-default btn-rounded mb-4">
+                Qo'shish
+               </a>
+              {% endif %}
+            </h6>
+            {% if request.user.is_superuser %}
+                <!--Card content-->
+                <table class="table table-striped">
+                     <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Miqdor</th>
+                          <th scope="col">Joriy Shartnoma</th>
+                          <th scope="col">Ma'lumot</th>
+                          <th scope="col">To'lov muddati</th>
+                          <th scope="col">O'quv yili</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                {% for shartnoma in shartnomas %}
+                    <tbody>
+                        <tr>
+                          <th scope="row">{{ forloop.counter }}</th>
+                          <td>{{ shartnoma }}</td>
+                          <td>{% if shartnoma.is_current_shartnoma %}<i class="fa fa-check"></i>{% else %}<i class="fa fa-times">{% endif %}</td>
+                          <td>{{ shartnoma.description }}</td>
+                          <td>{{ shartnoma.deadline }}</td>
+                          <td>{{ shartnoma.session }}</td>
+                          <td>
+                            <a title="view" class="blue-text"><i class="fa fa-user"></i></a>
+                            <a href="{% url 'edit_shartnoma' pk=shartnoma.pk %}" title="edit" class="teal-text"><i class="fa fa-pencil"></i></a>
+                            <a href="{% url 'delete_shartnoma' pk=shartnoma.pk %}" title="delete" class="red-text"><i class="fa fa-times"></i></a>
+                          </td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+                 </table>
+                 {% endif %}
+
+                 {% if request.user.is_student %}
+                 <div class="row">
+                 <div class="col-md-6">
+                   <h6 class="my-2 dark-grey-text text-capitalize">Shartnoma to'lovi miqdori  - <span class="blue-text font-weight-bold">{{ current_shartnoma }}</span> so'm</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="my-2 dark-grey-text text-capitalize">To'lov muddati - <span class="red-text font-weight-bold">{{ current_shartnoma.deadline }}</span></h6>
+                   </div>
+                 </div>
+                   <div class="row">
+                    <div class="col-md-6">
+                      <h6 class="my-2 dark-grey-text text-capitalize">Jami to'langan miqdor  - <span class="blue-text font-weight-bold">{{ sum.jami }}</span> so'm</h6>
+                     </div>
+                     <div class="col-md-6">
+                       <h6 class="my-2 dark-grey-text text-capitalize">Oxirgi to'lov sanasi - <span class="red-text font-weight-bold">{{ payments.last.payment_date }}</span></h6>
+                      </div>
+                  </div>
+                 <p class="font-weight-bold">To`lov tarixi</p>
+                 <table class="table table-striped table-bordered">
+                  <thead>
+                     <tr>
+                       <th scope="col">#</th>
+                       <th scope="col">To'lov miqdori</th>
+                       <th scope="col">Sana</th>
+                       <th scope="col">O'quv yili</th>
+                       <th scope="col">Action</th>
+                     </tr>
+                 </thead>
+             {% for payment in payments %}
+                 <tbody>
+                     <tr>
+                       <th scope="row">{{ forloop.counter }}</th>
+                       <td>{{ payment }}</td>
+                       <td>{{ payment.payment_date }}</td>
+                       <td>{{ payment.contract.session }}</td>
+                       <td>
+                         <a href="{% url 'edit_payment' pk=payment.pk %}" title="edit" class="teal-text"><i class="fa fa-pencil"></i></a>
+                         
+                       </td>
+                     </tr>
+                 </tbody>
+             {% endfor %}
+              </table>
+                 {% endif %}
+            </div>
+          </div>
+            </div>
+        </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} Manage Course | ARMS {% endblock title %}
+
+{% block side_bar %}
+    {% include 'partial_active_element.html' with active='group_list' %}
+{% endblock side_bar %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+<div class="card">
+
+    <h5 class="card-header info-color white-text text-center py-4">
+        <strong>Create Group</strong>
+    </h5>
+
+    <div class="card-body px-lg-5 pt-0">
+
+        <form method="post" class="md-form" style="color: #757575;">{% csrf_token %}
+             <div class="form-row">
+                <div class="col">
+                    <!-- First name -->
+                    <div class="md-form">
+                        {{ form.number }}
+                        <label for="materialRegisterFormFirstName">{{ form.number.label }}</label>
+                    </div>
+                    <div class="md-form">
+                        {{ form.major }}
+                        <label for="materialRegisterFormFirstName">{{ form.major.label }}</label>
+                    </div>
+                    <div class="md-form">
+                        {{ form.kurator }}
+                        <label for="materialRegisterFormFirstName">{{ form.kurator.label }}</label>
+                    </div>
+                </div>
+           	<button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">
+            	Save
+            </button>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
